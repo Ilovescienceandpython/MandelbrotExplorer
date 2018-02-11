@@ -1,14 +1,14 @@
-﻿  main.cpp
+﻿  Mandelbrot.cpp
+Mandelbrot.cpp(37): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+Mandelbrot.cpp(39): warning C4018: '<': signed/unsigned mismatch
+Mandelbrot.cpp(228): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+Mandelbrot.cpp(270): warning C4838: conversion from 'unsigned int' to 'unsigned char' requires a narrowing conversion
+  main.cpp
 main.cpp(61): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 main.cpp(74): warning C4018: '<=': signed/unsigned mismatch
-  main2.cpp
-  Mandelbrot.cpp
-Mandelbrot.cpp(71): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-Mandelbrot.cpp(76): warning C4018: '<': signed/unsigned mismatch
-Mandelbrot.cpp(295): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-Mandelbrot.cpp(339): warning C4838: conversion from 'unsigned int' to 'unsigned char' requires a narrowing conversion
   Generating code
-e:\projekte\c++\mandelbrotmenge\mandelbrotmenge\mandelbrot.cpp(328): warning C4172: returning address of local variable or temporary: ret
-  All 341 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  1 of 341 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Mandelbrotmenge.vcxproj -> E:\Projekte\C++\Mandelbrotmenge\x64\Release\Mandelbrotmenge.exe

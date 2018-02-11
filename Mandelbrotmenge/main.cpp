@@ -23,15 +23,9 @@ void Console()
 
 int main()
 {
-
 	sf::RenderWindow window(sf::VideoMode(XSIZE, YSIZE), "SFML works!");
 	std::thread t(Console);
 
-	//sf::RenderTexture rt;
-	//rt.create(XSIZE, YSIZE);
-	//sf::Sprite sprite(rt.getTexture());
-	//sprite.setPosition(0, 0);
-	//mb.Scale(sf::Vector2f(5,5));
 	window.setVerticalSyncEnabled(true);
 	sf::Clock MoveClock;
 	mb.Update();
@@ -60,7 +54,6 @@ int main()
 			{
 				window.setView(sf::View(sf::FloatRect(0.f, 0.f, window.getSize().x, window.getSize().y)));
 				mb.SetSize(window.getSize());
-				//rt.create(window.getSize().x, window.getSize().y);
 			}
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
@@ -84,28 +77,10 @@ int main()
 		}
 
 		window.clear();
-		//rt.draw(mb);
 		window.draw(mb);
 		window.display();
 	}
 	t.detach();
 	return 0;
-
-	/*
-		sf::RenderTexture rt;
-		rt.create(XSIZE, YSIZE);
-
-		mb.Move(sf::Vector2i(600, 0),false);
-		mb.ResetMove();
-
-		for (size_t i = 0; i < 100; i++)
-		{
-			mb.Zoom(sf::Vector2i(XSIZE/2, YSIZE / 2),1);
-			rt.draw(mb);
-			rt.getTexture().copyToImage().saveToFile("images/test_" + std::to_string(i) + "_.png");
-		}
-
-
-		return 0;
-	*/
+	
 }

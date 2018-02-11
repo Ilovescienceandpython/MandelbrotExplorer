@@ -22,41 +22,7 @@ inline double mmap(double value, double start1, double stop1, double start2, dou
 {
 	return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 }
-/*
-//Use slices so the main programm must wait until the last thread is finish
-inline void Mandelbrot::Tile(sf::Uint8 *pixels, double* XPosition, double* YPosition, unsigned char * C, int starty, int endy)
-{
-	sf::Clock ztime;
-	double zx, zy, zx2, zy2;
-	unsigned int n = 0;
-	for (size_t i = m_Dscreen.y_min() + starty; i < endy; i++)
-	{
-		for (size_t j = m_Dscreen.x_min(); j < m_Dscreen.x_max(); j++)
-		{
-			zx = zy = zx2 = zy2 = 0;
-			n = 0;
 
-
-			for (; n < m_Iiter_max && zx2 + zy2 < 4; n++) {
-				zy = 2 * zx * zy + YPosition[i];
-				zx = zx2 - zy2 + XPosition[j];
-				zx2 = zx * zx;
-				zy2 = zy * zy;
-			}
-
-			unsigned int index = ((m_Ix * i) + j) * 4;
-
-			pixels[index] = C[n*3];
-			pixels[index + 1] = C[n*3 + 1];
-			pixels[index + 2] = C[n*3 + 2];
-			pixels[index + 3] = 255;
-		}
-	}
-	mutex.lock();
-	std::cout << this_thread::get_id() << ": " << ztime.restart().asMicroseconds() << std::endl;
-	mutex.unlock();
-}
-*/
 
 inline void Mandelbrot::Tile(sf::Uint8 *pixels, double* XPosition, double* YPosition,unsigned int *Index, unsigned char * C, int starty, int step, int endy)
 {
@@ -70,17 +36,12 @@ inline void Mandelbrot::Tile(sf::Uint8 *pixels, double* XPosition, double* YPosi
 		int y = i % m_Ix; 
 		int x = (i - y) / m_Ix;
 
-		//int y = Index[i * 2];
-		//int x = Index[i * 2 + 1];
-
 		for (; n < m_Iiter_max && zx2 + zy2 < 4; n++) {
 			zy = 2 * zx * zy + YPosition[x];
 			zx = zx2 - zy2 + XPosition[y];
 			zx2 = zx * zx;
 			zy2 = zy * zy;
 		}
-
-		//unsigned int index = ((m_Ix * i) + j) * 4;
 	
 		pixels[i*4] = C[n * 3];
 		pixels[i*4 + 1] = C[n * 3 + 1];
@@ -111,35 +72,7 @@ inline void Mandelbrot::Update()
 	m_Ssprite.setTextureRect(sf::IntRect(0, 0, m_Ttexture.getSize().x, m_Ttexture.getSize().y));
 	m_Ssprite.setTexture(m_Ttexture);
 }
-/*
-//Slice same as above
-inline void Mandelbrot::Update()
-{
-	std::cout << "--------------" << std::endl;
-	std::vector<std::thread*> threads;
-	int NumberOfThreads = std::thread::hardware_concurrency();
 
-	for (int y = 0; y < NumberOfThreads; y++)
-	{
-		int ytiles = m_Dscreen.height() / NumberOfThreads;
-		int starty = y * ytiles;
-		int endy = (y + 1) * ytiles;
-		threads.push_back(new std::thread(&Mandelbrot::Tile, this, pixels, PositionsX, PositionsY, Colors, starty, endy));
-	}
-
-	for (size_t i = 0; i < NumberOfThreads; i++)
-	{
-		threads.at(i)->join();
-		delete threads[i];
-		threads[i] = NULL;
-	}
-
-	m_Iimage.create(m_Ix, m_Iy, pixels);
-	m_Ttexture.loadFromImage(m_Iimage);
-	m_Ssprite.setTextureRect(sf::IntRect(0, 0, m_Ttexture.getSize().x, m_Ttexture.getSize().y));
-	m_Ssprite.setTexture(m_Ttexture);
-}
-*/
 void Mandelbrot::Zoom(sf::Vector2i mousexy, double delta, bool update)
 {
 	double px = ((double)mousexy.x / m_Ssprite.getScale().x / (double)m_Dscreen.width() * m_Dfract.width()) + m_Dfract.x_min();
@@ -309,15 +242,11 @@ inline void Mandelbrot::draw(sf::RenderTarget & target, sf::RenderStates states)
 }
 
 
-
-
 inline unsigned char * Mandelbrot::get_rgb_piecewise_linear(unsigned int n) {
-	int N = 256; // colors per element
+	int N = 256;
 	int N2 = N * N;
 	int N3 = N * N * N;
-	// map n on the 0..1 interval (real numbers)
 	double t = (double)n / (double)m_Iiter_max;
-	// expand n on the 0 .. 256^3 interval (integers)
 	n = (int)(t * (double)N3);
 
 	unsigned char b = n / (N2);
@@ -329,10 +258,8 @@ inline unsigned char * Mandelbrot::get_rgb_piecewise_linear(unsigned int n) {
 }
 
 inline unsigned char * Mandelbrot::get_rgb_smooth(unsigned int n) {
-	// map n on the 0..1 interval
 	double t = (double)n / (double)m_Iiter_max;
 
-	// Use smooth polynomials for r, g, b
 	unsigned int r = (int)(9 * (1 - t)*t*t*t * 255);
 	unsigned int g = (int)(15 * (1 - t)*(1 - t)*t*t * 255);
 	unsigned int b = (int)(8.5*(1 - t)*(1 - t)*(1 - t)*t * 255);
